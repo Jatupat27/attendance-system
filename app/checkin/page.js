@@ -33,7 +33,7 @@ export default function CheckinPage() {
       <h1>เช็คชื่อเข้าเรียน</h1>
 
       <input
-        placeholder="ชื่อ"
+        placeholder="ชื่อนักศึกษา"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
