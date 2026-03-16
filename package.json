@@ -9,12 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "firebase": "^12.10.0",
     "html5-qrcode": "^2.3.8",
     "next": "16.1.6",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
     "react": "19.2.3",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.3",
     "react-qr-code": "^2.0.18"
   },
