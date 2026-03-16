@@ -4,7 +4,7 @@ import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRPage() {
 
-    const checkinUrl = "https://obsequwet-entangleable-paul.ngrok-free.dev/checkin";
+    const checkinUrl = "https://attendance-system-mu-dun.vercel.app";
 
   return (
     <div style={{ padding: 20 }}>

@@ -2,33 +2,22 @@
 
 import { useState } from "react";
 import { db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 
-export default function Home() {
+export default function AddStudent() {
   const [name, setName] = useState("");
   const [studentId, setStudentId] = useState("");
 
   const addStudent = async () => {
-    if (!name || !studentId) {
-      alert("กรุณากรอกชื่อและรหัสนักศึกษา");
-      return;
-    }
+    await addDoc(collection(db, "students"), {
+      name: name,
+      studentId: studentId,
+      time: new Date()
+    });
 
-    try {
-      await setDoc(doc(db, "students", studentId), {
-        name: name,
-        studentId: studentId,
-        time: new Date()
-      });
-
-      alert("บันทึกสำเร็จ");
-
-      setName("");
-      setStudentId("");
-    } catch (error) {
-      console.error("Error adding student:", error);
-      alert("เกิดข้อผิดพลาด");
-    }
+    alert("บันทึกสำเร็จ");
+    setName("");
+    setStudentId("");
   };
 
   return (
@@ -36,7 +25,6 @@ export default function Home() {
       <h1>เพิ่มนักศึกษา</h1>
 
       <input
-        type="text"
         placeholder="ชื่อนักศึกษา"
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -45,7 +33,6 @@ export default function Home() {
       <br /><br />
 
       <input
-        type="text"
         placeholder="รหัสนักศึกษา"
         value={studentId}
         onChange={(e) => setStudentId(e.target.value)}
