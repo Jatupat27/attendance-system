@@ -4,7 +4,10 @@ import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRPage() {
 
-    const checkinUrl = "https://attendance-system-mu-dun.vercel.app";
+  const studentId = "663450035-5";
+
+  const checkinUrl =
+    "https://attendance-system-mu-dun.vercel.app/scan?studentId=" + studentId;
 
   return (
     <div style={{ padding: 20 }}>
@@ -16,4 +19,3 @@ export default function QRPage() {
     </div>
   );
 }
-
