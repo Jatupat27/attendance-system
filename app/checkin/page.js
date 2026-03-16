@@ -2,82 +2,126 @@
 
 import { useState } from "react";
 import { db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
 
 export default function CheckinPage() {
 
-  const [name, setName] = useState("");
-  const [studentId, setStudentId] = useState("");
+  const [name,setName] = useState("");
+  const [studentId,setStudentId] = useState("");
+  const [message,setMessage] = useState("");
 
-  const checkin = async () => {
+  const handleSubmit = async (e) => {
 
-    if (!name || !studentId) {
-      alert("กรุณากรอกชื่อและรหัสนักศึกษา");
+    e.preventDefault();
+
+    if(!name || !studentId){
+      setMessage("กรุณากรอกข้อมูลให้ครบ");
       return;
     }
 
-    try {
+    try{
 
-      // ใช้ studentId เป็น document ID
-      await setDoc(doc(db, "attendance", studentId), {
-        name: name,
-        studentId: studentId,
-        time: new Date()
+      await addDoc(collection(db,"attendance"),{
+        name:name,
+        studentId:studentId,
+        time:Date.now()
       });
 
-      alert("เช็คชื่อสำเร็จ");
+      setMessage("เช็คชื่อสำเร็จ ✅");
 
       setName("");
       setStudentId("");
 
-    } catch (error) {
+    }catch(err){
 
-      console.error("Error saving attendance:", error);
-      alert("เกิดข้อผิดพลาด");
+      console.error(err);
+      setMessage("เกิดข้อผิดพลาด");
 
     }
 
   };
 
   return (
-    <div style={{ padding: 20 }}>
 
-      <h1>เช็คชื่อเข้าเรียน</h1>
+    <div style={{
+      minHeight:"100vh",
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center",
+      background:"#f3f4f6",
+      fontFamily:"sans-serif"
+    }}>
 
-      <div style={{ marginBottom: 10 }}>
-        <input
-          type="text"
-          placeholder="ชื่อนักศึกษา"
+      <div style={{
+        background:"white",
+        padding:40,
+        borderRadius:10,
+        width:350,
+        boxShadow:"0 5px 15px rgba(0,0,0,0.1)"
+      }}>
+
+        <h2 style={{marginBottom:20}}>
+          เช็คชื่อเข้าเรียน
+        </h2>
+
+        <form onSubmit={handleSubmit}>
+
+          <input
+          placeholder="ชื่อ"
           value={name}
-          onChange={(e) => setName(e.target.value)}
-          style={{ padding: 8, width: 250 }}
-        />
-      </div>
+          onChange={(e)=>setName(e.target.value)}
+          style={{
+            width:"100%",
+            padding:10,
+            marginBottom:10,
+            border:"1px solid #ddd",
+            borderRadius:5
+          }}
+          />
 
-      <div style={{ marginBottom: 10 }}>
-        <input
-          type="text"
+          <input
           placeholder="รหัสนักศึกษา"
           value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-          style={{ padding: 8, width: 250 }}
-        />
+          onChange={(e)=>setStudentId(e.target.value)}
+          style={{
+            width:"100%",
+            padding:10,
+            marginBottom:20,
+            border:"1px solid #ddd",
+            borderRadius:5
+          }}
+          />
+
+          <button
+          type="submit"
+          style={{
+            width:"100%",
+            padding:12,
+            background:"#2563eb",
+            color:"white",
+            border:"none",
+            borderRadius:5,
+            fontSize:16
+          }}
+          >
+          เช็คชื่อ
+          </button>
+
+        </form>
+
+        {message && (
+          <p style={{
+            marginTop:15,
+            color:"green"
+          }}>
+            {message}
+          </p>
+        )}
+
       </div>
 
-      <button
-        onClick={checkin}
-        style={{
-          padding: 10,
-          backgroundColor: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: 5,
-          cursor: "pointer"
-        }}
-      >
-        เช็คชื่อ
-      </button>
-
     </div>
+
   );
+
 }
