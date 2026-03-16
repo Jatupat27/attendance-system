@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { db } from "@/lib/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function CheckinPage() {
 
@@ -12,43 +12,72 @@ export default function CheckinPage() {
   const checkin = async () => {
 
     if (!name || !studentId) {
-      alert("กรุณากรอกข้อมูล");
+      alert("กรุณากรอกชื่อและรหัสนักศึกษา");
       return;
     }
 
-    await addDoc(collection(db, "attendance"), {
-      name: name,
-      studentId: studentId,
-      time: new Date()
-    });
+    try {
 
-    alert("เช็คชื่อสำเร็จ");
+      // ใช้ studentId เป็น document ID
+      await setDoc(doc(db, "attendance", studentId), {
+        name: name,
+        studentId: studentId,
+        time: new Date()
+      });
 
-    setName("");
-    setStudentId("");
+      alert("เช็คชื่อสำเร็จ");
+
+      setName("");
+      setStudentId("");
+
+    } catch (error) {
+
+      console.error("Error saving attendance:", error);
+      alert("เกิดข้อผิดพลาด");
+
+    }
+
   };
 
   return (
     <div style={{ padding: 20 }}>
+
       <h1>เช็คชื่อเข้าเรียน</h1>
 
-      <input
-        placeholder="ชื่อนักศึกษา"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+      <div style={{ marginBottom: 10 }}>
+        <input
+          type="text"
+          placeholder="ชื่อนักศึกษา"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          style={{ padding: 8, width: 250 }}
+        />
+      </div>
 
-      <br /><br />
+      <div style={{ marginBottom: 10 }}>
+        <input
+          type="text"
+          placeholder="รหัสนักศึกษา"
+          value={studentId}
+          onChange={(e) => setStudentId(e.target.value)}
+          style={{ padding: 8, width: 250 }}
+        />
+      </div>
 
-      <input
-        placeholder="รหัสนักศึกษา"
-        value={studentId}
-        onChange={(e) => setStudentId(e.target.value)}
-      />
+      <button
+        onClick={checkin}
+        style={{
+          padding: 10,
+          backgroundColor: "#2563eb",
+          color: "white",
+          border: "none",
+          borderRadius: 5,
+          cursor: "pointer"
+        }}
+      >
+        เช็คชื่อ
+      </button>
 
-      <br /><br />
-
-      <button onClick={checkin}>เช็คชื่อ</button>
     </div>
   );
 }
