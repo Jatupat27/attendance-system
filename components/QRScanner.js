@@ -16,7 +16,7 @@ export default function QRScanner({onScan}){
      onScan(text)
    })
 
- },[])
+ },[onScan])
 
  return(
    <div id="reader"></div>
