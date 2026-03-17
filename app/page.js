@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
@@ -92,7 +90,7 @@ const absent=totalStudents-present;
 const chartData={
 labels:["มาเรียน","ขาดเรียน"],
 datasets:[{
-label:"จำนวน",
+label:"จำนวนนักศึกษา",
 data:[present,absent],
 backgroundColor:["#3b82f6","#ef4444"]
 }]
@@ -183,7 +181,7 @@ alt="logo"
 </div>
 
 <div>
-อาจารย์ผู้สอน
+อาจารย์ผู้สอน ผศ.ดร.กานดา ศรอินทร์
 </div>
 
 </div>
@@ -349,7 +347,9 @@ style={button}
 }
 
 function Card({title,value,color}){
+
 return(
+
 <div style={{
 background:"white",
 padding:"20px",
@@ -357,10 +357,14 @@ borderRadius:"10px",
 boxShadow:"0 5px 15px rgba(0,0,0,0.1)",
 textAlign:"center"
 }}>
+
 <h3>{title}</h3>
 <h1 style={{color}}>{value}</h1>
+
 </div>
+
 )
+
 }
 
 const box={
